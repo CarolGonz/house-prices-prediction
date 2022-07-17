@@ -17,6 +17,8 @@ class FunctionalTestCase(unittest.TestCase):
         self.assertGreater(expected_y.shape[0], 0, "Expected dataset with more than 0 rows for the target dataset")
 
         # # Should do some analysis
+        expected_stats = self.housing_forecasting.price_stats(expected_y)
+        self.assertEqual(expected_stats.__class__.__name__, "dict")
 
         # # Should return predictions
 
