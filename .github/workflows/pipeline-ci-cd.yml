@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - '*' # run for all branches without / in the name
-
+  pull_request:
+    branches:
+      - '**' # run for all branches
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
