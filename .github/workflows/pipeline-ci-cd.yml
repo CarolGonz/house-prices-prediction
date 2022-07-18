@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - '*' # run for all branches without / in the name
-  pull_request:
-    branches:
-      - '**' # run for all branches
+  release:
+    types:
+      - published
+      - edited
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
@@ -32,3 +33,20 @@ jobs:
     - name: Test with unittest
       run: |
         python -m unittest discover
+
+  push_to_registry:
+    name: Build and push Docker image to Docker Hub
+    if: github.event_name == 'release' # only when a "release" is "published"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: carolgonz/house-prince-predictions:latest
